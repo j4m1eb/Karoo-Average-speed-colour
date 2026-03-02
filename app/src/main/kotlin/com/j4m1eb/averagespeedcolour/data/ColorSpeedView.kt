@@ -66,7 +66,7 @@ fun ColorSpeedView(
         topRowPadding = 2f
     }
 
-    val finalTextSize: Float = config.textSize.toFloat() - 5f
+    val finalTextSize: Float = config.textSize.toFloat()
 
     val viewHeightInDp: Float = ceil(config.viewSize.second / context.resources.displayMetrics.density)
 
