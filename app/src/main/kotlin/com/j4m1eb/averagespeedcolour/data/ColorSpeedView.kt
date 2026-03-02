@@ -15,6 +15,7 @@ import androidx.glance.LocalContext
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxHeight
@@ -105,11 +106,10 @@ fun ColorSpeedView(
         else -> 3
     }
 
-    val headerTextSize = TextUnit(16f, TextUnitType.Sp)
+    val headerTextSize = TextUnit(17f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
 
-    val topRowHeight = 22f
-    val bottomRowHeight: Float = viewHeightInDp - topRowHeight - topRowPadding
+    val topRowHeight = 26f
 
     Column(
         modifier = GlanceModifier
@@ -123,14 +123,14 @@ fun ColorSpeedView(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(topRowHeight.dp),
-            verticalAlignment = Alignment.Bottom,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.Start
         ) {
             Image(
                 modifier = GlanceModifier
-                    .height(14.dp)
-                    .width(14.dp)
-                    .padding(end = 2.dp),
+                    .height(18.dp)
+                    .width(18.dp)
+                    .padding(end = 3.dp),
                 provider = ImageProvider(resId = R.drawable.icon_gauge),
                 contentDescription = description,
                 colorFilter = ColorFilter.tint(ColorProvider(textColor)),
@@ -146,19 +146,18 @@ fun ColorSpeedView(
             )
             ArrowProvider(
                 modifier = GlanceModifier
-                    .height(20.dp)
-                    .width(20.dp),
+                    .height(22.dp)
+                    .width(22.dp),
                 level = barLevel,
                 color = textColor
             )
         }
-        // Main number row: full width for the speed value, bottom aligned
-        Row(
+        // Main number: Box fills remaining space, BottomStart pins number to bottom
+        Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .height(bottomRowHeight.dp),
-            verticalAlignment = Alignment.Bottom,
-            horizontalAlignment = Alignment.Start
+                .defaultWeight(),
+            contentAlignment = Alignment.BottomStart
         ) {
             Text(
                 modifier = GlanceModifier.fillMaxWidth(),
