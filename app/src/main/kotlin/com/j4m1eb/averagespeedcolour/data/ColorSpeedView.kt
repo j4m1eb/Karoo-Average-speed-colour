@@ -63,14 +63,10 @@ fun ColorSpeedView(
 
     var topRowPadding = 0f
     if (config.viewSize.first <= 238) {
-        if (config.viewSize.second < 128) {
-            topRowPadding += 4f
-        } else {
-            topRowPadding += 6f
-        }
+        topRowPadding = 2f
     }
 
-    val finalTextSize: Float = config.textSize.toFloat() - 3f
+    val finalTextSize: Float = config.textSize.toFloat() - 5f
 
     val viewHeightInDp: Float = ceil(config.viewSize.second / context.resources.displayMetrics.density)
 
@@ -109,10 +105,10 @@ fun ColorSpeedView(
         else -> 3
     }
 
-    val headerTextSize = TextUnit(17f, TextUnitType.Sp)
+    val headerTextSize = TextUnit(14f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
-    
-    val topRowHeight = 20f
+
+    val topRowHeight = 16f
     val bottomRowHeight: Float = viewHeightInDp - topRowHeight - topRowPadding
 
     Column(
@@ -132,8 +128,8 @@ fun ColorSpeedView(
         ) {
             Image(
                 modifier = GlanceModifier
-                    .height(14.dp)
-                    .width(14.dp)
+                    .height(12.dp)
+                    .width(12.dp)
                     .padding(end = 2.dp),
                 provider = ImageProvider(resId = R.drawable.icon_gauge),
                 contentDescription = description,
@@ -145,14 +141,13 @@ fun ColorSpeedView(
                 style = TextStyle(
                     color = ColorProvider(textColor),
                     fontSize = headerTextSize,
-                    textAlign = textAlignment,
-                    fontFamily = FontFamily.SansSerif
+                    textAlign = textAlignment
                 )
             )
             ArrowProvider(
                 modifier = GlanceModifier
-                    .height(18.dp)
-                    .width(18.dp),
+                    .height(16.dp)
+                    .width(16.dp),
                 level = barLevel,
                 color = textColor
             )
