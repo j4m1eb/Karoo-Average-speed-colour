@@ -105,10 +105,10 @@ fun ColorSpeedView(
         else -> 3
     }
 
-    val headerTextSize = TextUnit(14f, TextUnitType.Sp)
+    val headerTextSize = TextUnit(16f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
 
-    val topRowHeight = 16f
+    val topRowHeight = 22f
     val bottomRowHeight: Float = viewHeightInDp - topRowHeight - topRowPadding
 
     Column(
@@ -128,8 +128,8 @@ fun ColorSpeedView(
         ) {
             Image(
                 modifier = GlanceModifier
-                    .height(12.dp)
-                    .width(12.dp)
+                    .height(14.dp)
+                    .width(14.dp)
                     .padding(end = 2.dp),
                 provider = ImageProvider(resId = R.drawable.icon_gauge),
                 contentDescription = description,
@@ -146,18 +146,18 @@ fun ColorSpeedView(
             )
             ArrowProvider(
                 modifier = GlanceModifier
-                    .height(16.dp)
-                    .width(16.dp),
+                    .height(20.dp)
+                    .width(20.dp),
                 level = barLevel,
                 color = textColor
             )
         }
-        // Main number row: full width for the speed value
+        // Main number row: full width for the speed value, bottom aligned
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(bottomRowHeight.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
