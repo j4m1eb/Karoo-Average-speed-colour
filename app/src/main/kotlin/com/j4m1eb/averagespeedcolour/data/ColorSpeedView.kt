@@ -62,8 +62,15 @@ fun ColorSpeedView(
 ) {
 
     var topRowPadding = 0f
-    var bottomTextPadding = 0f
-    var finalTextSize: Float = config.textSize.toFloat()
+    if (config.viewSize.first <= 238) {
+        if (config.viewSize.second < 128) {
+            topRowPadding += 4f
+        } else {
+            topRowPadding += 6f
+        }
+    }
+
+    val finalTextSize: Float = config.textSize.toFloat() - 3f
 
     val viewHeightInDp: Float = ceil(config.viewSize.second / context.resources.displayMetrics.density)
 
@@ -86,7 +93,7 @@ fun ColorSpeedView(
         )
         speedDiff > 1.0 -> Pair(
             Color(context.getColor(R.color.dark_green)),
-            Color(context.getColor(R.color.white))
+            Color(context.getColor(R.color.black))
         )
         speedDiff < -1.0 -> Pair(
             Color(context.getColor(R.color.dark_red)),
@@ -106,32 +113,7 @@ fun ColorSpeedView(
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
     
     val topRowHeight = 20f
-    val bottomRowHeight: Float = viewHeightInDp - topRowHeight
-
-    if (config.viewSize.first <= 238) {
-        if (config.viewSize.second > 300) {
-            bottomTextPadding += 11f
-            if (currentSpeed >= 100.0) {
-                finalTextSize -= 24f
-            } else {
-                finalTextSize -= 6f
-            }
-        } else if (config.viewSize.second < 128) {
-            //(238,126)
-            topRowPadding += 4f
-            bottomTextPadding += 6f
-        } else {
-            //(238,148)
-            topRowPadding += 6f
-            bottomTextPadding += 11f
-            if (currentSpeed >= 100.0) {
-                finalTextSize -= 16f
-                bottomTextPadding += 4f
-            } else {
-                finalTextSize -= 6f
-            }
-        }
-    }
+    val bottomRowHeight: Float = viewHeightInDp - topRowHeight - topRowPadding
 
     Column(
         modifier = GlanceModifier
@@ -244,21 +226,18 @@ fun ColorSpeedView(
                 .fillMaxWidth()
                 .height(bottomRowHeight.dp)
                 .padding(start = 0.dp, end = 8.dp),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalAlignment = Alignment.Start
         ) {
             ArrowProvider(
                 modifier = GlanceModifier
                     .fillMaxHeight()
-                    .defaultWeight()
-                    .wrapContentWidth()
                     .width(30.dp),
                 level = barLevel,
                 color = textColor
             )
             Text(
                 modifier = GlanceModifier
-                    .padding(top = bottomTextPadding.dp)
                     .defaultWeight()
                     .fillMaxWidth(),
                 text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),

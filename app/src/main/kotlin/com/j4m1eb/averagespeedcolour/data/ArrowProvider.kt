@@ -25,7 +25,13 @@ fun ArrowProvider (
 ){
     when (level) {
         0 ->
-            Icons.Default
+            Image(
+                modifier = modifier,
+                provider = ImageProvider(resId = R.drawable.stat_0_24px),
+                contentDescription = "Target",
+                contentScale = ContentScale.Fit,
+                colorFilter = ColorFilter.tint(ColorProvider(Color.Transparent))
+            )
         1 ->
             Image(
                 modifier = modifier,
