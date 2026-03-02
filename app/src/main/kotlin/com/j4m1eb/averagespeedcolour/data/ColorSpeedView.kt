@@ -122,127 +122,52 @@ fun ColorSpeedView(
             .cornerRadius(8.dp)
             .background(backgroundColor)
     ) {
-        when (config.alignment) {
-            ViewConfig.Alignment.CENTER ->
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(topRowHeight.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = GlanceModifier
-                            .defaultWeight()
-                            .wrapContentSize()
-                            .padding(end = 2.dp, top = 5.dp),
-                        provider = ImageProvider(
-                            resId = R.drawable.icon_gauge,
-                        ),
-                        contentDescription = description,
-                        colorFilter = ColorFilter.tint(ColorProvider(textColor)),
-                    )
-                    Text(
-                        modifier = GlanceModifier
-                            .padding(end = 2.dp, top = 0.dp),
-                        text = averageSpeedFormatted,
-                        style = TextStyle(
-                            color = ColorProvider(textColor),
-                            fontSize = headerTextSize,
-                            textAlign = textAlignment,
-                            fontFamily = FontFamily.SansSerif
-                        )
-                    )
-                }
-
-            ViewConfig.Alignment.LEFT ->
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(topRowHeight.dp),
-                    verticalAlignment = Alignment.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        modifier = GlanceModifier
-                            .defaultWeight()
-                            .padding(end = 2.dp, top = 0.dp),
-                        text = averageSpeedFormatted,
-                        style = TextStyle(
-                            color = ColorProvider(textColor),
-                            fontSize = headerTextSize,
-                            textAlign = textAlignment,
-                            fontFamily = FontFamily.SansSerif
-                        )
-                    )
-                    Image(
-                        modifier = GlanceModifier
-                            .defaultWeight()
-                            .wrapContentSize()
-                            .padding(end = 2.dp, top = 5.dp),
-                        provider = ImageProvider(
-                            resId = R.drawable.icon_gauge,
-                        ),
-                        contentDescription = description,
-                        colorFilter = ColorFilter.tint(ColorProvider(textColor)),
-                    )
-                }
-
-            else ->
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(topRowHeight.dp),
-                    verticalAlignment = Alignment.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = GlanceModifier
-                            .defaultWeight()
-                            .wrapContentSize()
-                            .padding(end = 2.dp, top = 5.dp),
-                        provider = ImageProvider(
-                            resId = R.drawable.icon_gauge,
-                        ),
-                        contentDescription = description,
-                        colorFilter = ColorFilter.tint(ColorProvider(textColor)),
-                    )
-                    Text(
-                        modifier = GlanceModifier
-                            .defaultWeight()
-                            .padding(end = 2.dp, top = 0.dp),
-                        text = averageSpeedFormatted,
-                        style = TextStyle(
-                            color = ColorProvider(textColor),
-                            fontSize = headerTextSize,
-                            textAlign = textAlignment,
-                            fontFamily = FontFamily.SansSerif
-                        )
-                    )
-                }
-        }
+        // Header row: gauge icon | average speed | direction arrow
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .height(bottomRowHeight.dp)
-                .padding(start = 0.dp, end = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .height(topRowHeight.dp),
+            verticalAlignment = Alignment.Bottom,
             horizontalAlignment = Alignment.Start
         ) {
+            Image(
+                modifier = GlanceModifier
+                    .height(14.dp)
+                    .width(14.dp)
+                    .padding(end = 2.dp),
+                provider = ImageProvider(resId = R.drawable.icon_gauge),
+                contentDescription = description,
+                colorFilter = ColorFilter.tint(ColorProvider(textColor)),
+            )
+            Text(
+                modifier = GlanceModifier.defaultWeight(),
+                text = averageSpeedFormatted,
+                style = TextStyle(
+                    color = ColorProvider(textColor),
+                    fontSize = headerTextSize,
+                    textAlign = textAlignment,
+                    fontFamily = FontFamily.SansSerif
+                )
+            )
             ArrowProvider(
                 modifier = GlanceModifier
-                    .fillMaxHeight()
-                    .width(30.dp),
+                    .height(18.dp)
+                    .width(18.dp),
                 level = barLevel,
                 color = textColor
             )
+        }
+        // Main number row: full width for the speed value
+        Row(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .height(bottomRowHeight.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.Start
+        ) {
             Text(
-                modifier = GlanceModifier
-                    .defaultWeight()
-                    .fillMaxWidth(),
+                modifier = GlanceModifier.fillMaxWidth(),
                 text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),
-//                text = "${config.viewSize.second}",
-//                text = "${config.viewSize.first}, ${config.viewSize.second}",
                 style = TextStyle(
                     color = ColorProvider(textColor),
                     fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
