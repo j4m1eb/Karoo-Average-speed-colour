@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Color Speed</string>
-    <string name="extension_name">Color Speed</string>
-    <string name="extension_description">Color coded speed based on ride average</string>
+    <string name="app_name">Average Speed Colour</string>
+    <string name="extension_name">Average Speed Colour</string>
+    <string name="extension_description">Colour coded speed based on ride average</string>
     <string name="speed_title">Speed vs. Ride Average</string>
     <string name="speed_title_short">Speed</string>
     <string name="avg_speed_title">Speed vs. Lap</string>

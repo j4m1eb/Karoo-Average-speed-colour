@@ -1,12 +1,12 @@
-package com.currand60.karoocolorspeed.data
+package com.j4m1eb.averagespeedcolour.data
 
 import android.content.Context
 import androidx.compose.ui.unit.DpSize
 import androidx.glance.appwidget.ExperimentalGlanceRemoteViewsApi
 import androidx.glance.appwidget.GlanceRemoteViews
-import com.currand60.karoocolorspeed.KarooSystemServiceProvider
-import com.currand60.karoocolorspeed.R
-import com.currand60.karoocolorspeed.managers.ConfigurationManager
+import com.j4m1eb.averagespeedcolour.KarooSystemServiceProvider
+import com.j4m1eb.averagespeedcolour.R
+import com.j4m1eb.averagespeedcolour.managers.ConfigurationManager
 import io.hammerhead.karooext.extension.DataTypeImpl
 import io.hammerhead.karooext.internal.ViewEmitter
 import io.hammerhead.karooext.models.DataPoint
@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalGlanceRemoteViewsApi::class)
 class CurrentVsLapAverageSpeed(
@@ -44,66 +44,43 @@ class CurrentVsLapAverageSpeed(
     private fun previewFlow(constantValue: Double? = null): Flow<StreamState> = flow {
         while (true) {
             val value = constantValue ?: (((0..55).random() * 10).toDouble() / 10.0)
-            emit(StreamState.Streaming(
-                DataPoint(
-                    dataTypeId,
-                    mapOf(DataType.Field.SINGLE to value),
-                    extension
-                )
-            ))
+            emit(StreamState.Streaming(DataPoint(dataTypeId, mapOf(DataType.Field.SINGLE to value), extension)))
             delay(1000)
         }
     }.flowOn(Dispatchers.IO)
 
-//
-
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
         val configJob = dataScope.launch {
-            emitter.onNext(
-                UpdateGraphicConfig(showHeader = false)
-            )
-            emitter.onNext(
-                UpdateNumericConfig(DataType.Type.SPEED)
-            )
+            emitter.onNext(UpdateGraphicConfig(showHeader = false))
+            emitter.onNext(UpdateNumericConfig(DataType.Type.SPEED))
         }
         val viewJob = dataScope.launch {
             val colorConfig = ConfigurationManager(context).getConfigFlow().first()
-            val userProfileFlow = karooSystem.streamUserProfile()
-            val speedFlow = if (!config.preview) karooSystem.streamDataFlow(DataType.Type.SPEED) else previewFlow()
-            val averageSpeedFlow = if (!config.preview) karooSystem.streamDataFlow(DataType.Type.AVERAGE_SPEED_LAST_LAP) else previewFlow(10.0)
-            combine(speedFlow, averageSpeedFlow, userProfileFlow ) { speedState, averageSpeedState, userProfileState ->
-                if (speedState is StreamState.Streaming && averageSpeedState is StreamState.Streaming) {
-                    val speedUnits = when(userProfileState.preferredUnit.distance) {
+            val speedUnitsFlow: Flow<Double> = if (config.preview) {
+                flow { emit(2.23694) }
+            } else {
+                karooSystem.streamUserProfile().map { profile ->
+                    when (profile.preferredUnit.distance) {
                         UserProfile.PreferredUnit.UnitType.IMPERIAL -> 2.23694
                         else -> 3.6
                     }
-                    Triple(
-                        speedState.dataPoint.singleValue!! * speedUnits,
-                        averageSpeedState.dataPoint.singleValue!! * speedUnits,
-                        speedUnits
-                    )
+                }
+            }
+            val speedFlow = if (!config.preview) karooSystem.streamDataFlow(DataType.Type.SPEED) else previewFlow()
+            val averageSpeedFlow = if (!config.preview) karooSystem.streamDataFlow(DataType.Type.AVERAGE_SPEED_LAST_LAP) else previewFlow(10.0)
+            combine(speedFlow, averageSpeedFlow, speedUnitsFlow) { speedState, averageSpeedState, speedUnits ->
+                if (speedState is StreamState.Streaming && averageSpeedState is StreamState.Streaming) {
+                    Triple(speedState.dataPoint.singleValue!! * speedUnits, averageSpeedState.dataPoint.singleValue!! * speedUnits, speedUnits)
                 } else {
-                    Triple(0.0, 0.0, 2.23694)
+                    Triple(0.0, 0.0, speedUnits)
                 }
             }.collect {
                 val result = glance.compose(context, DpSize.Unspecified) {
-                    ColorSpeedView(
-                        context,
-                        it.first,
-                        it.second,
-                        config,
-                        colorConfig,
-                        "avg_speed_title",
-                        context.getString(R.string.avg_speed_description),
-                        it.third
-                    )
+                    ColorSpeedView(context, it.first, it.second, config, colorConfig, "avg_speed_title", context.getString(R.string.avg_speed_description), it.third)
                 }
                 emitter.updateView(result.remoteViews)
             }
         }
-        emitter.setCancellable {
-            viewJob.cancel()
-            configJob.cancel()
-        }
+        emitter.setCancellable { viewJob.cancel(); configJob.cancel() }
     }
 }

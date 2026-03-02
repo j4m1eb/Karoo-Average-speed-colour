@@ -1,10 +1,10 @@
-package com.currand60.karoocolorspeed
+package com.j4m1eb.averagespeedcolour
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.currand60.karoocolorspeed.screens.MainScreen
-import com.currand60.karoocolorspeed.theme.AppTheme
+import com.j4m1eb.averagespeedcolour.screens.MainScreen
+import com.j4m1eb.averagespeedcolour.theme.AppTheme
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {

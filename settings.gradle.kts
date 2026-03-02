@@ -38,5 +38,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Karoo Color Speed"
+rootProject.name = "Average Speed Colour"
 include("app")

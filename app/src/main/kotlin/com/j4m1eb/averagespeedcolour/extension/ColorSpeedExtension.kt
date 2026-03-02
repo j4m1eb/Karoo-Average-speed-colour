@@ -1,12 +1,12 @@
-package com.currand60.karoocolorspeed.extension
+package com.j4m1eb.averagespeedcolour.extension
 
-import com.currand60.karoocolorspeed.KarooSystemServiceProvider
-import com.currand60.karoocolorspeed.BuildConfig
-import com.currand60.karoocolorspeed.data.CurrentVsLapAverageSpeed
-import com.currand60.karoocolorspeed.data.CurrentVsRideAverageSpeed
-import com.currand60.karoocolorspeed.data.LapVsTargetColorSpeed
-import com.currand60.karoocolorspeed.data.CurrentLapVsLLAverageSpeed
-import com.currand60.karoocolorspeed.data.SpeedVsTargetColorSpeed
+import com.j4m1eb.averagespeedcolour.KarooSystemServiceProvider
+import com.j4m1eb.averagespeedcolour.BuildConfig
+import com.j4m1eb.averagespeedcolour.data.CurrentVsLapAverageSpeed
+import com.j4m1eb.averagespeedcolour.data.CurrentVsRideAverageSpeed
+import com.j4m1eb.averagespeedcolour.data.LapVsTargetColorSpeed
+import com.j4m1eb.averagespeedcolour.data.CurrentLapVsLLAverageSpeed
+import com.j4m1eb.averagespeedcolour.data.SpeedVsTargetColorSpeed
 import io.hammerhead.karooext.extension.KarooExtension
 import org.koin.android.ext.android.inject
 import timber.log.Timber

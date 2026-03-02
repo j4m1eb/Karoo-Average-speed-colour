@@ -1,9 +1,9 @@
-package com.currand60.karoocolorspeed
+package com.j4m1eb.averagespeedcolour
 
 import android.app.Application
 import android.content.Context
 import androidx.glance.LocalContext
-import com.currand60.karoocolorspeed.managers.ConfigurationManager
+import com.j4m1eb.averagespeedcolour.managers.ConfigurationManager
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.RideState

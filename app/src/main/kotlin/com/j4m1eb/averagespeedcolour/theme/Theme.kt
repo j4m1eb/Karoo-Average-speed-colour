@@ -1,4 +1,4 @@
-package com.currand60.karoocolorspeed.theme
+package com.j4m1eb.averagespeedcolour.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

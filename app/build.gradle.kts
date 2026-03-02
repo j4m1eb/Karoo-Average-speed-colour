@@ -8,14 +8,14 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
 }
 
-val projectName = "karoo-colorspeed"
+val projectName = "average-speed-colour"
 val screenshotBaseNames = listOf(
     "example1.png", "example2.png", "example3.png", "example4.png",
     "config_screen.png", "config_screen2.png"
 )
-val projectLabel = "Karoo Color Speed"
-val projectDescription = "Colored Speed and icon indicator based on ride or lap average speed"
-val projectDeveloper = "currand"
+val projectLabel = "Average Speed Colour"
+val projectDescription = "Coloured speed indicator based on ride or lap average speed"
+val projectDeveloper = "j4m1eb"
 
 kotlin {
     compilerOptions {
@@ -24,11 +24,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.currand60.karoocolorspeed"
+    namespace = "com.j4m1eb.averagespeedcolour"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.currand60.karoocolorspeed"
+        applicationId = "com.j4m1eb.averagespeedcolour"
         minSdk = 23
         targetSdk = 34
         versionCode = 250100102
@@ -147,6 +147,6 @@ tasks.named("assemble") {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }

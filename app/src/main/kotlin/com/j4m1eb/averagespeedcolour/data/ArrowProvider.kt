@@ -1,8 +1,8 @@
-package com.currand60.karoocolorspeed.data
+package com.j4m1eb.averagespeedcolour.data
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
-import com.currand60.karoocolorspeed.R
+import com.j4m1eb.averagespeedcolour.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.glance.ColorFilter
