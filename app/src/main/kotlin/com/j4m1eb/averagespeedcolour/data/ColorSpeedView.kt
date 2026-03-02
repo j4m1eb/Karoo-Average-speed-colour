@@ -18,6 +18,7 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
+import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
@@ -106,7 +107,7 @@ fun ColorSpeedView(
         else -> 3
     }
 
-    val headerTextSize = TextUnit(17f, TextUnitType.Sp)
+    val headerTextSize = TextUnit(18f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
 
     val topRowHeight = 26f
@@ -123,7 +124,7 @@ fun ColorSpeedView(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(topRowHeight.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalAlignment = Alignment.Start
         ) {
             Image(
@@ -152,24 +153,19 @@ fun ColorSpeedView(
                 color = textColor
             )
         }
-        // Main number: Box fills remaining space, BottomStart pins number to bottom
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .defaultWeight(),
-            contentAlignment = Alignment.BottomStart
-        ) {
-            Text(
-                modifier = GlanceModifier.fillMaxWidth(),
-                text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),
-                style = TextStyle(
-                    color = ColorProvider(textColor),
-                    fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
-                    textAlign = textAlignment,
-                    fontFamily = FontFamily.Monospace,
-                )
+        // Spacer pushes text to the bottom — weight absorbs all remaining vertical space
+        Spacer(modifier = GlanceModifier.fillMaxWidth().defaultWeight())
+        // Main number sits flush at the bottom
+        Text(
+            modifier = GlanceModifier.fillMaxWidth(),
+            text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),
+            style = TextStyle(
+                color = ColorProvider(textColor),
+                fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
+                textAlign = textAlignment,
+                fontFamily = FontFamily.Monospace,
             )
-        }
+        )
     }
 }
 
