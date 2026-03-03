@@ -68,7 +68,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build -PpreReleaseVersion=${{ env.RELEASE_VERSION }}
+      run: ./gradlew assembleRelease generateManifest -PpreReleaseVersion=${{ env.RELEASE_VERSION }}
 
     - name: Archive APK
       uses: actions/upload-artifact@v4
