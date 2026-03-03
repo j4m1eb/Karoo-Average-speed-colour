@@ -1,36 +1,92 @@
-# Karoo Color Speed Extension
+# Karoo Color Speed
 
-A speed field that changes color based on current speed vs. ride or average speed.
+A Karoo cycling computer extension that displays your current speed with live colour-coded feedback — instantly showing whether you're above, below, or on pace at a glance.
 
-|  | |
+| | |
 | :------- | :------: |
-|![config_screen.png](config_screen.png)    | ![config_screen2.png](config_screen2.png)
-| ![example1.png](example1.png)   | ![example2.png](example2.png)  |
-|![example3.png](example3.png)    | ![example4.png](example4.png)  |
+| ![config_screen.png](config_screen.png) | ![config_screen2.png](config_screen2.png) |
+| ![example1.png](example1.png) | ![example2.png](example2.png) |
+| ![example3.png](example3.png) | ![example4.png](example4.png) |
 
+---
 
-## Features
-- Current vs. ride average
-- Current vs. last lap average
-- Current lap average vs. last lap average
-- Current speed vs. target speed
-- Lap speed vs. target speed
+## How It Works
+
+The speed field changes colour in real time based on how your current speed compares to a reference:
+
+| Colour | Meaning |
+| :--- | :--- |
+| 🟢 **Green** | Above target / average |
+| 🔴 **Red** | Below target / average |
+| ⬜ **No colour** | At target / average (within ±1) |
+
+The header row shows the reference speed (average or target) alongside a small icon, and the large number shows your current speed — so you always know what you're being compared against.
+
+---
+
+## Data Fields
+
+Add one or more of these fields via the Karoo data field editor:
+
+| Field | Description |
+| :--- | :--- |
+| **Speed vs. Ride Average** | Current speed vs. your overall ride average |
+| **Speed vs. Last Lap** | Current speed vs. last lap's average |
+| **Current Lap vs. Last Lap** | This lap's average vs. the previous lap's average |
+| **Speed vs. Target** | Current speed vs. a custom target speed you set |
+| **Lap vs. Target** | Current lap average vs. your custom target speed |
+
+---
+
+## Configuration
+
+Tap the app icon on your Karoo to open settings:
+
+- **Target Speed** — Set your desired pace (shown in mph or kmh based on your Karoo preference). Used by the "vs. Target" fields.
+- **Use Teal** — Swap the above-pace green for a teal colour if you prefer.
+- **Show Icons** — Toggle direction arrows on/off. When off, a small gauge icon is shown next to the reference speed instead.
+
+A welcome screen with a colour key is shown each time you open the app as a quick reminder.
+
+---
 
 ## Requirements
-- Karoo (tested on last Karoo ) with version 1.527 or later
+
+- Karoo 2 or Karoo 3
+- Firmware version **1.527 or later**
+
+---
 
 ## Installation
 
-You can sideload the app using the following steps for Karoo 2
+### Karoo 3 (recommended)
 
-1. Download the APK from the releases .
-1. Prepare your Karoo for sideloading by following the [step-by-step guide](https://www.dcrainmaker.com/2021/02/how-to-sideload-android-apps-on-your-hammerhead-karoo-1-karoo-2.html) by DC Rainmaker.
-1. Install the app using the command `adb install app-release.apk`.
-1. **Reboot your Karoo**
+1. Go to the [Releases page](https://github.com/j4m1eb/Karoo-Average-speed-colour/releases) and copy the link to the latest `app-release.apk`.
+2. Share the APK link to the **Hammerhead companion app** on your phone.
+3. Install via the companion app.
+4. Reboot your Karoo.
 
-If you've Karoo 3 and v > 1.527 you can sideload the app using the following steps:
+### Karoo 2 (ADB sideload)
 
-1. Share the apk link from the [releases page](https://github.com/currand/karoo-colorspeed/releases) with Hammerhead companion app
-2. Install the app using the Hammerhead companion app.
-3. Reboot the Karoo
+1. Download `app-release.apk` from the [Releases page](https://github.com/j4m1eb/Karoo-Average-speed-colour/releases).
+2. Enable developer mode on your Karoo — follow the [DC Rainmaker sideloading guide](https://www.dcrainmaker.com/2021/02/how-to-sideload-android-apps-on-your-hammerhead-karoo-1-karoo-2.html).
+3. Install via ADB: `adb install app-release.apk`
+4. Reboot your Karoo.
 
+---
+
+## Adding Fields to a Ride Profile
+
+1. Open **Karoo settings → Profiles → [Your Profile]**
+2. Edit a data page and tap **Add Field**
+3. Search for "Color Speed" or browse to find the fields
+4. Pick the field(s) you want and save
+
+---
+
+## Built With
+
+- [Hammerhead Karoo Extension SDK](https://github.com/hammerheadnav/karoo-ext)
+- Jetpack Compose + Glance (RemoteViews)
+- Kotlin Coroutines & DataStore
+- Koin dependency injection
