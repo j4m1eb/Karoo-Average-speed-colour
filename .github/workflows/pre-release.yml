@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # Needed for creating a GitHub Release
+      packages: read  # Needed to download Karoo SDK from GitHub Packages
     steps:
     - name: Extract tag name
       # This step only runs if the workflow was triggered by a tag push.

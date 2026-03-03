@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: read  # Needed to download Karoo SDK from GitHub Packages
     steps:
     - name: Extract tag name
       if: startsWith(github.ref, 'refs/tags/')
