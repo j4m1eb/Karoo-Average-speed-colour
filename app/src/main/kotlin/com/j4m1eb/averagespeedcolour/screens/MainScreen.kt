@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -21,11 +22,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -49,6 +53,7 @@ import com.j4m1eb.averagespeedcolour.R
 import com.j4m1eb.averagespeedcolour.data.ConfigData
 import com.j4m1eb.averagespeedcolour.managers.ConfigurationManager
 import io.hammerhead.karooext.models.UserProfile
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -86,6 +91,7 @@ fun MainScreen(
 
     var originalConfig by remember { mutableStateOf(ConfigData.DEFAULT) }
     var currentConfig by remember { mutableStateOf(ConfigData.DEFAULT) }
+    var saved by remember { mutableStateOf(false) }
     var speedMultiplier by remember { mutableDoubleStateOf(if (karooDistanceUnit == UserProfile.PreferredUnit.UnitType.IMPERIAL) 2.23694 else 3.6) }
 
     val configIsGood by remember(currentConfig) {
@@ -157,7 +163,47 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Save button
+            // Teal colour toggle
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = context.getString(R.string.use_teal),
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Switch(
+                    checked = currentConfig.useTeal,
+                    onCheckedChange = { checked ->
+                        currentConfig = currentConfig.copy(useTeal = checked)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Show icons toggle
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = context.getString(R.string.show_icons),
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Switch(
+                    checked = currentConfig.showIcons,
+                    onCheckedChange = { checked ->
+                        currentConfig = currentConfig.copy(showIcons = checked)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Save button — turns green briefly after a successful save.
             FilledTonalButton(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -170,16 +216,28 @@ fun MainScreen(
                             Timber.d("Attempting to save config: $configToSave")
                             configManager.saveConfig(configToSave)
                             Timber.i("Configuration save initiated.")
+                            originalConfig = configToSave
+                            saved = true
+                            delay(1500)
+                            saved = false
                         }
                     } else {
                         Timber.w("Save blocked due to input validation errors.")
                     }
                 },
-                enabled = configIsGood && currentConfig != originalConfig
+                enabled = saved || (configIsGood && currentConfig != originalConfig),
+                colors = if (saved) {
+                    ButtonDefaults.filledTonalButtonColors(
+                        containerColor = Color(0xFF1EFF00),
+                        contentColor = Color.Black
+                    )
+                } else {
+                    ButtonDefaults.filledTonalButtonColors()
+                }
             ) {
                 Icon(Icons.Default.Check, contentDescription = "Save")
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(context.getString(R.string.save))
+                Text(if (saved) context.getString(R.string.saved) else context.getString(R.string.save))
             }
         }
 

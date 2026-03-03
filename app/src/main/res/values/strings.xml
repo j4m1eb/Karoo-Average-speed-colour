@@ -33,6 +33,9 @@
     <string name="display_errors">"Display arrows next to the speed values?"</string>
     <string name="background_colors">"Change background colors based on speed?"</string>
     <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="use_teal">Teal for above average</string>
+    <string name="show_icons">Show direction icons</string>
 
 
 

@@ -3,8 +3,9 @@
     <color name="text_color">#FFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="dark_green">#02B583</color>
+    <color name="dark_green">#1EFF00</color>
     <color name="light_green">#61EDB5</color>
+    <color name="teal">#02B583</color>
     <color name="middle">#92A9B4</color>
     <color name="middle_light">#C1D2E3</color>
     <color name="yellow">#FFF50D</color>

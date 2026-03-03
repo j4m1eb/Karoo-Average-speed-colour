@@ -2,6 +2,8 @@ package com.j4m1eb.averagespeedcolour.data
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Paint
+import android.graphics.Typeface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
@@ -15,18 +17,13 @@ import androidx.glance.LocalContext
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
-import androidx.glance.layout.wrapContentSize
-import androidx.glance.layout.wrapContentWidth
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.text.FontFamily
@@ -90,7 +87,8 @@ fun ColorSpeedView(
             Color(context.getColor(R.color.text_color))
         )
         speedDiff > 1.0 -> Pair(
-            Color(context.getColor(R.color.dark_green)),
+            if (colorConfig.useTeal) Color(context.getColor(R.color.teal))
+            else Color(context.getColor(R.color.dark_green)),
             Color(context.getColor(R.color.black))
         )
         speedDiff < -1.0 -> Pair(
@@ -107,10 +105,31 @@ fun ColorSpeedView(
         else -> 3
     }
 
+    // Measure the actual Monospace font metrics to find how far the baseline sits
+    // below the top of a TextView (includes the top-font-padding Android adds by default).
+    // Cap-height digits (0–9) end exactly at the baseline, so placing the baseline
+    // 2 dp above the field bottom seats digits flush with the edge without being
+    // clipped by the corner radius.  This bottom-aligns the number correctly for any
+    // field size where the text fits; for very wide fields with larger SDK textSizes the
+    // 20 dp floor keeps the header visible.
+    val density = context.resources.displayMetrics.density
+    val numPaint = Paint().apply {
+        textSize = finalTextSize * density
+        typeface = Typeface.MONOSPACE
+    }
+    val fm = numPaint.fontMetrics
+    val baselineFromTopDp = (-fm.top) / density   // top of TextView → baseline
+    val topRowHeight = maxOf(20f, viewHeightInDp - topRowPadding - baselineFromTopDp - 5f)
     val headerTextSize = TextUnit(18f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
 
-    val topRowHeight = 26f
+    // Header group (arrow + avg speed) honours the same alignment the user picked for
+    // the main number, so left/centre/right fields all look consistent.
+    val headerHorizontalAlignment: Alignment.Horizontal = when (config.alignment) {
+        ViewConfig.Alignment.CENTER -> Alignment.CenterHorizontally
+        ViewConfig.Alignment.LEFT   -> Alignment.Start
+        ViewConfig.Alignment.RIGHT  -> Alignment.End
+    }
 
     Column(
         modifier = GlanceModifier
@@ -119,25 +138,36 @@ fun ColorSpeedView(
             .cornerRadius(8.dp)
             .background(backgroundColor)
     ) {
-        // Header row: gauge icon | average speed | direction arrow
+        // Header: direction arrow (showIcons on) or gauge label icon (showIcons off),
+        // followed by average speed — one icon before the value, Karoo-native style.
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(topRowHeight.dp),
-            verticalAlignment = Alignment.Bottom,
-            horizontalAlignment = Alignment.Start
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = headerHorizontalAlignment
         ) {
-            Image(
-                modifier = GlanceModifier
-                    .height(18.dp)
-                    .width(18.dp)
-                    .padding(end = 3.dp),
-                provider = ImageProvider(resId = R.drawable.icon_gauge),
-                contentDescription = description,
-                colorFilter = ColorFilter.tint(ColorProvider(textColor)),
-            )
+            if (colorConfig.showIcons) {
+                ArrowProvider(
+                    modifier = GlanceModifier
+                        .height(18.dp)
+                        .width(18.dp)
+                        .padding(end = 3.dp),
+                    level = barLevel,
+                    color = textColor
+                )
+            } else {
+                Image(
+                    modifier = GlanceModifier
+                        .height(18.dp)
+                        .width(18.dp)
+                        .padding(top = 4.dp, end = 3.dp),
+                    provider = ImageProvider(resId = R.drawable.icon_avg_pace),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(ColorProvider(textColor))
+                )
+            }
             Text(
-                modifier = GlanceModifier.defaultWeight(),
                 text = averageSpeedFormatted,
                 style = TextStyle(
                     color = ColorProvider(textColor),
@@ -145,17 +175,8 @@ fun ColorSpeedView(
                     textAlign = textAlignment
                 )
             )
-            ArrowProvider(
-                modifier = GlanceModifier
-                    .height(22.dp)
-                    .width(22.dp),
-                level = barLevel,
-                color = textColor
-            )
         }
-        // Spacer pushes text to the bottom — weight absorbs all remaining vertical space
-        Spacer(modifier = GlanceModifier.fillMaxWidth().defaultWeight())
-        // Main number sits flush at the bottom
+        // Number: full-width, honours the field's alignment setting.
         Text(
             modifier = GlanceModifier.fillMaxWidth(),
             text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),
