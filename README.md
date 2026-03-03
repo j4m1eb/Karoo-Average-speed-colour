@@ -2,12 +2,6 @@
 
 A Karoo cycling computer extension that displays your current speed with live colour-coded feedback — instantly showing whether you're above, below, or on pace at a glance.
 
-| | |
-| :------- | :------: |
-| ![config_screen.png](config_screen.png) | ![config_screen2.png](config_screen2.png) |
-| ![example1.png](example1.png) | ![example2.png](example2.png) |
-| ![example3.png](example3.png) | ![example4.png](example4.png) |
-
 ---
 
 ## How It Works
