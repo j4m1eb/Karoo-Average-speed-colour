@@ -31,8 +31,8 @@ android {
         applicationId = "com.j4m1eb.averagespeedcolour"
         minSdk = 23
         targetSdk = 34
-        versionCode = 250100102
-        versionName = "0.4.5"
+        versionCode = 10000
+        versionName = "1.0"
         signingConfig = signingConfigs.getByName("debug")
     }
 
