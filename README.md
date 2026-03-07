@@ -56,9 +56,8 @@ A welcome screen with a colour key is shown each time you open the app as a quic
 ### Karoo 3 (recommended)
 
 1. Go to the [Releases page](https://github.com/j4m1eb/Karoo-Average-speed-colour/releases/latest) on your phone.
-2. Tap `app-release.apk` to download it.
-3. Once downloaded, tap **Open** and choose the **Hammerhead companion app** to open it with.
-4. The companion app will push it to your Karoo — reboot when prompted.
+2. Tap `app-release.apk` then use the **share sheet** to share it to the **Hammerhead companion app**.
+3. The companion app will push it to your Karoo — reboot when prompted.
 
 ### Karoo 2 (ADB sideload)
 
