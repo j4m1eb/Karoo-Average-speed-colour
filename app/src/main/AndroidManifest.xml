@@ -33,7 +33,7 @@
         </service>
         <meta-data
             android:name="io.hammerhead.karooext.MANIFEST_URL"
-            android:value="https://github.com/j4m1eb/average-speed-colour/releases/latest/download/manifest.json" />
+            android:value="https://github.com/j4m1eb/Karoo-Average-speed-colour/releases/latest/download/manifest.json" />
     </application>
 
 </manifest>
