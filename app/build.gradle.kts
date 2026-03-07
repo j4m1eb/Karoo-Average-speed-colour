@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
 }
 
-val projectName = "average-speed-colour"
+val projectName = "Karoo-Average-speed-colour"
 val screenshotBaseNames = listOf(
     "example1.png", "example2.png", "example3.png", "example4.png",
     "config_screen.png", "config_screen2.png"
