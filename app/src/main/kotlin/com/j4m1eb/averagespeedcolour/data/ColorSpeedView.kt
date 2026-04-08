@@ -134,39 +134,70 @@ fun ColorSpeedView(
     }
 
     if (isDoubleWidth) {
-        // Double-width: show both numbers side by side at full size.
+        // Double-width: small header row with icon + label, then two big numbers side by side.
         // swap toggles left/right positions.
         val leftSpeed = if (colorConfig.swapRows) currentSpeedFormatted else averageSpeedFormatted
         val rightSpeed = if (colorConfig.swapRows) averageSpeedFormatted else currentSpeedFormatted
-        Row(
+        Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding(start = 5.dp, end = 5.dp)
+                .padding(start = 5.dp, end = 5.dp, top = topRowPadding.dp)
                 .cornerRadius(8.dp)
-                .background(backgroundColor),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(backgroundColor)
         ) {
-            Text(
-                modifier = GlanceModifier.defaultWeight(),
-                text = leftSpeed,
-                style = TextStyle(
-                    color = ColorProvider(textColor),
-                    fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
-                    textAlign = TextAlign.Center,
-                    fontFamily = FontFamily.Monospace,
+            // Small header: gauge icon + label
+            Row(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .height(topRowHeight.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = GlanceModifier
+                        .height(18.dp)
+                        .width(18.dp)
+                        .padding(end = 4.dp),
+                    provider = ImageProvider(resId = R.drawable.icon_gauge),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(ColorProvider(textColor))
                 )
-            )
-            Text(
-                modifier = GlanceModifier.defaultWeight(),
-                text = rightSpeed,
-                style = TextStyle(
-                    color = ColorProvider(textColor),
-                    fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
-                    textAlign = TextAlign.Center,
-                    fontFamily = FontFamily.Monospace,
+                Text(
+                    text = "AVG SPEED COLOUR",
+                    style = TextStyle(
+                        color = ColorProvider(textColor),
+                        fontSize = headerTextSize,
+                        textAlign = TextAlign.Center,
+                    )
                 )
-            )
+            }
+            // Two big numbers side by side
+            Row(
+                modifier = GlanceModifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = GlanceModifier.defaultWeight(),
+                    text = leftSpeed,
+                    style = TextStyle(
+                        color = ColorProvider(textColor),
+                        fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily.Monospace,
+                    )
+                )
+                Text(
+                    modifier = GlanceModifier.defaultWeight(),
+                    text = rightSpeed,
+                    style = TextStyle(
+                        color = ColorProvider(textColor),
+                        fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily.Monospace,
+                    )
+                )
+            }
         }
     } else {
         // Single-width: stacked layout. swap toggles which value is top/bottom.
