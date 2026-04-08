@@ -157,7 +157,7 @@ fun ColorSpeedView(
                     modifier = GlanceModifier
                         .height(18.dp)
                         .width(18.dp)
-                        .padding(end = 4.dp),
+                        .padding(top = 4.dp, end = 4.dp),
                     provider = ImageProvider(resId = R.drawable.icon_gauge),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(ColorProvider(textColor))
@@ -166,7 +166,7 @@ fun ColorSpeedView(
                     text = "AVG SPEED COLOUR",
                     style = TextStyle(
                         color = ColorProvider(textColor),
-                        fontSize = headerTextSize,
+                        fontSize = TextUnit(14f, TextUnitType.Sp),
                         textAlign = TextAlign.Center,
                     )
                 )
