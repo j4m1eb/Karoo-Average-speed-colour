@@ -203,6 +203,26 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Swap rows toggle
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = context.getString(R.string.swap_rows),
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Switch(
+                    checked = currentConfig.swapRows,
+                    onCheckedChange = { checked ->
+                        currentConfig = currentConfig.copy(swapRows = checked)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             // Save button — turns green briefly after a successful save.
             FilledTonalButton(
                 modifier = Modifier

@@ -122,6 +122,8 @@ fun ColorSpeedView(
     val topRowHeight = maxOf(20f, viewHeightInDp - topRowPadding - baselineFromTopDp - 5f)
     val headerTextSize = TextUnit(18f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
+    val currentSpeedFormatted: String = ((currentSpeed * 10.0).roundToInt() / 10.0).formated()
+    val isDoubleWidth = config.viewSize.first > 400
 
     // Header group (arrow + avg speed) honours the same alignment the user picked for
     // the main number, so left/centre/right fields all look consistent.
@@ -131,62 +133,102 @@ fun ColorSpeedView(
         ViewConfig.Alignment.RIGHT  -> Alignment.End
     }
 
-    Column(
-        modifier = GlanceModifier
-            .fillMaxSize()
-            .padding(start = 5.dp, end = 5.dp, top = topRowPadding.dp)
-            .cornerRadius(8.dp)
-            .background(backgroundColor)
-    ) {
-        // Header: direction arrow (showIcons on) or gauge label icon (showIcons off),
-        // followed by average speed — one icon before the value, Karoo-native style.
+    if (isDoubleWidth) {
+        // Double-width: show both numbers side by side at full size.
+        // swap toggles left/right positions.
+        val leftSpeed = if (colorConfig.swapRows) currentSpeedFormatted else averageSpeedFormatted
+        val rightSpeed = if (colorConfig.swapRows) averageSpeedFormatted else currentSpeedFormatted
         Row(
             modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(topRowHeight.dp),
+                .fillMaxSize()
+                .padding(start = 5.dp, end = 5.dp)
+                .cornerRadius(8.dp)
+                .background(backgroundColor),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = headerHorizontalAlignment
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (colorConfig.showIcons) {
-                ArrowProvider(
-                    modifier = GlanceModifier
-                        .height(18.dp)
-                        .width(18.dp)
-                        .padding(end = 3.dp),
-                    level = barLevel,
-                    color = textColor
-                )
-            } else {
-                Image(
-                    modifier = GlanceModifier
-                        .height(18.dp)
-                        .width(18.dp)
-                        .padding(top = 4.dp, end = 3.dp),
-                    provider = ImageProvider(resId = R.drawable.icon_avg_pace),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(ColorProvider(textColor))
-                )
-            }
             Text(
-                text = averageSpeedFormatted,
+                modifier = GlanceModifier.defaultWeight(),
+                text = leftSpeed,
                 style = TextStyle(
                     color = ColorProvider(textColor),
-                    fontSize = headerTextSize,
-                    textAlign = textAlignment
+                    fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
+                    textAlign = TextAlign.Center,
+                    fontFamily = FontFamily.Monospace,
+                )
+            )
+            Text(
+                modifier = GlanceModifier.defaultWeight(),
+                text = rightSpeed,
+                style = TextStyle(
+                    color = ColorProvider(textColor),
+                    fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
+                    textAlign = TextAlign.Center,
+                    fontFamily = FontFamily.Monospace,
                 )
             )
         }
-        // Number: full-width, honours the field's alignment setting.
-        Text(
-            modifier = GlanceModifier.fillMaxWidth(),
-            text = ((currentSpeed * 10.0).roundToInt() / 10.0).formated(),
-            style = TextStyle(
-                color = ColorProvider(textColor),
-                fontSize = TextUnit(finalTextSize, TextUnitType.Sp),
-                textAlign = textAlignment,
-                fontFamily = FontFamily.Monospace,
+    } else {
+        // Single-width: stacked layout. swap toggles which value is top/bottom.
+        val topText = if (colorConfig.swapRows) currentSpeedFormatted else averageSpeedFormatted
+        val bottomText = if (colorConfig.swapRows) averageSpeedFormatted else currentSpeedFormatted
+        val bottomTextSize = TextUnit(finalTextSize, TextUnitType.Sp)
+        Column(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .padding(start = 5.dp, end = 5.dp, top = topRowPadding.dp)
+                .cornerRadius(8.dp)
+                .background(backgroundColor)
+        ) {
+            // Header row: icon + top value
+            Row(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .height(topRowHeight.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = headerHorizontalAlignment
+            ) {
+                if (colorConfig.showIcons) {
+                    ArrowProvider(
+                        modifier = GlanceModifier
+                            .height(18.dp)
+                            .width(18.dp)
+                            .padding(end = 3.dp),
+                        level = barLevel,
+                        color = textColor
+                    )
+                } else {
+                    Image(
+                        modifier = GlanceModifier
+                            .height(18.dp)
+                            .width(18.dp)
+                            .padding(top = 4.dp, end = 3.dp),
+                        provider = ImageProvider(resId = R.drawable.icon_avg_pace),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(ColorProvider(textColor))
+                    )
+                }
+                Text(
+                    text = topText,
+                    style = TextStyle(
+                        color = ColorProvider(textColor),
+                        fontSize = headerTextSize,
+                        textAlign = textAlignment
+                    )
+                )
+            }
+            // Bottom row: big number
+            Text(
+                modifier = GlanceModifier.fillMaxWidth(),
+                text = bottomText,
+                style = TextStyle(
+                    color = ColorProvider(textColor),
+                    fontSize = bottomTextSize,
+                    textAlign = textAlignment,
+                    fontFamily = FontFamily.Monospace,
+                )
             )
-        )
+        }
     }
 }
 

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Build Debug APK",
+      "runtimeExecutable": "./gradlew",
+      "runtimeArgs": ["assembleDebug"],
+      "port": null
+    },
+    {
+      "name": "Build Release APK",
+      "runtimeExecutable": "./gradlew",
+      "runtimeArgs": ["assembleRelease", "generateManifest"],
+      "port": null
+    }
+  ]
+}

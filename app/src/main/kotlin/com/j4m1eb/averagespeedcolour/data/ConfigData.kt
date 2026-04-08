@@ -5,6 +5,7 @@ data class ConfigData(
     val useTeal: Boolean = false,
     val showIcons: Boolean = true,
     val hasSeenWelcome: Boolean = false,
+    val swapRows: Boolean = false,
 ) {
     companion object {
         val DEFAULT = ConfigData(
@@ -12,6 +13,7 @@ data class ConfigData(
             useTeal = false,
             showIcons = true,
             hasSeenWelcome = false,
+            swapRows = false,
         )
     }
 

@@ -24,6 +24,7 @@ class ConfigurationManager(
         private val USE_TEAL_KEY = booleanPreferencesKey("useTeal")
         private val SHOW_ICONS_KEY = booleanPreferencesKey("showIcons")
         private val SEEN_WELCOME_KEY = booleanPreferencesKey("hasSeenWelcome")
+        private val SWAP_ROWS_KEY = booleanPreferencesKey("swapRows")
     }
 
     suspend fun saveConfig(config: ConfigData) {
@@ -33,6 +34,7 @@ class ConfigurationManager(
             preferences[USE_TEAL_KEY] = config.useTeal
             preferences[SHOW_ICONS_KEY] = config.showIcons
             preferences[SEEN_WELCOME_KEY] = config.hasSeenWelcome
+            preferences[SWAP_ROWS_KEY] = config.swapRows
         }
         Timber.i("Configuration successfully saved to DataStore.")
     }
@@ -45,6 +47,7 @@ class ConfigurationManager(
                 useTeal = preferences[USE_TEAL_KEY] ?: ConfigData.DEFAULT.useTeal,
                 showIcons = preferences[SHOW_ICONS_KEY] ?: ConfigData.DEFAULT.showIcons,
                 hasSeenWelcome = preferences[SEEN_WELCOME_KEY] ?: ConfigData.DEFAULT.hasSeenWelcome,
+                swapRows = preferences[SWAP_ROWS_KEY] ?: ConfigData.DEFAULT.swapRows,
             )
             Timber.d("Retrieved configuration: $config")
             config
@@ -58,6 +61,7 @@ class ConfigurationManager(
                 useTeal = preferences[USE_TEAL_KEY] ?: ConfigData.DEFAULT.useTeal,
                 showIcons = preferences[SHOW_ICONS_KEY] ?: ConfigData.DEFAULT.showIcons,
                 hasSeenWelcome = preferences[SEEN_WELCOME_KEY] ?: ConfigData.DEFAULT.hasSeenWelcome,
+                swapRows = preferences[SWAP_ROWS_KEY] ?: ConfigData.DEFAULT.swapRows,
             )
         }.distinctUntilChanged()
     }
