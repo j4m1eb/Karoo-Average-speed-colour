@@ -14,7 +14,10 @@ The speed field changes colour in real time based on how your current speed comp
 | 🔴 **Red** | Below target / average |
 | ⬜ **No colour** | At target / average (within ±1) |
 
-The header row shows the reference speed (average or target) alongside a small icon, and the large number shows your current speed — so you always know what you're being compared against.
+The field has two layouts depending on how wide it is on your data page:
+
+- **Single width** — reference speed small on top, current speed large below
+- **Double width** — both speeds shown side by side at full size, with a label header
 
 ---
 
@@ -39,6 +42,7 @@ Tap the app icon on your Karoo to open settings:
 - **Target Speed** — Set your desired pace (shown in mph or kmh based on your Karoo preference). Used by the "vs. Target" fields.
 - **Use Teal** — Swap the above-pace green for a teal colour if you prefer.
 - **Show Icons** — Toggle direction arrows on/off. When off, a small gauge icon is shown next to the reference speed instead.
+- **Swap Speed Positions** — Flips which speed is on top/left and which is on bottom/right.
 
 A welcome screen with a colour key is shown each time you open the app as a quick reminder.
 
