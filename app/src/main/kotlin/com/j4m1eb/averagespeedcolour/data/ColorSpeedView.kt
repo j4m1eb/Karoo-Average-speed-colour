@@ -60,12 +60,9 @@ fun ColorSpeedView(
     speedUnits: Double,
 ) {
 
-    var topRowPadding = 0f
-    if (config.viewSize.first <= 238) {
-        topRowPadding = 2f
-    }
-
     val finalTextSize: Float = config.textSize.toFloat()
+    val isDoubleWidth = config.viewSize.first > 400
+    val topRowPadding = 0f
 
     val viewHeightInDp: Float = ceil(config.viewSize.second / context.resources.displayMetrics.density)
 
@@ -119,11 +116,14 @@ fun ColorSpeedView(
     }
     val fm = numPaint.fontMetrics
     val baselineFromTopDp = (-fm.top) / density   // top of TextView → baseline
-    val topRowHeight = maxOf(20f, viewHeightInDp - topRowPadding - baselineFromTopDp - 5f)
-    val headerTextSize = TextUnit(18f, TextUnitType.Sp)
+    val singleWidthHeaderOffset = if (isDoubleWidth) 0f else -3f
+    val topRowHeight = maxOf(
+        20f,
+        viewHeightInDp - topRowPadding - baselineFromTopDp - 5f + singleWidthHeaderOffset
+    )
+    val headerTextSize = TextUnit(if (isDoubleWidth) 18f else 21f, TextUnitType.Sp)
     val averageSpeedFormatted: String = ((averageSpeed * 10.0).roundToInt() / 10.0).formated()
     val currentSpeedFormatted: String = ((currentSpeed * 10.0).roundToInt() / 10.0).formated()
-    val isDoubleWidth = config.viewSize.first > 400
 
     // Header group (arrow + avg speed) honours the same alignment the user picked for
     // the main number, so left/centre/right fields all look consistent.
@@ -222,8 +222,8 @@ fun ColorSpeedView(
                 if (colorConfig.showIcons) {
                     ArrowProvider(
                         modifier = GlanceModifier
-                            .height(18.dp)
-                            .width(18.dp)
+                            .height(21.dp)
+                            .width(21.dp)
                             .padding(end = 3.dp),
                         level = barLevel,
                         color = textColor
@@ -231,8 +231,8 @@ fun ColorSpeedView(
                 } else {
                     Image(
                         modifier = GlanceModifier
-                            .height(18.dp)
-                            .width(18.dp)
+                            .height(21.dp)
+                            .width(21.dp)
                             .padding(top = 4.dp, end = 3.dp),
                         provider = ImageProvider(resId = R.drawable.icon_avg_pace),
                         contentDescription = null,
@@ -357,4 +357,3 @@ fun PreviewAboveAverage() {
         speedUnits = 2.23694
     )
 }
-

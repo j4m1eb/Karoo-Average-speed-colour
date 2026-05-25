@@ -31,8 +31,8 @@ android {
         applicationId = "com.j4m1eb.averagespeedcolour"
         minSdk = 23
         targetSdk = 34
-        versionCode = 10103
-        versionName = "1.1.3"
+        versionCode = 20000
+        versionName = "2.0"
     }
 
     signingConfigs {

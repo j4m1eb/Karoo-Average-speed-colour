@@ -1,6 +1,6 @@
 # Developer Handoff — Average Speed Colour
 
-**Current version:** 1.1.3  
+**Current version:** 2.0  
 **GitHub repo:** https://github.com/j4m1eb/Karoo-Average-speed-colour  
 **Owner:** Jamie Bishop (@j4m1eb)  
 **Last updated:** May 2026
